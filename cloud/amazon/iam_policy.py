@@ -307,6 +307,13 @@ def main():
           pdoc = json.dumps(pdoc)
         except Exception as e:
           module.fail_json(msg='Failed to convert the policy into valid JSON: %s' % str(e))
+
+      # XXX: IAM doesn't accept preceeding spaces but Jinja2 templates
+      #      require this space to interpret the file correctly if you don't
+      #      use `| to_json`:
+      #      - https://stackoverflow.com/a/32014283
+      #      - https://groups.google.com/forum/#!topic/ansible-project/WUjiN9Wf32U
+      pdoc = pdoc.strip()
   else:
     pdoc=None
 
